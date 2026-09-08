@@ -16,6 +16,7 @@
     --mono:"Roboto Mono",ui-monospace,monospace;
   }
   *{ box-sizing:border-box; }
+  [hidden]{ display:none !important; }
   html,body{ margin:0; }
   body{
     background:var(--cream); color:var(--brown);
@@ -80,7 +81,7 @@
 <div class="hero">
   <p class="eyebrow">Back of House &middot; 3.3 The Rotation</p>
   <h1>Set Up Your Six Months of Pins</h1>
-  <p class="lede">Here is how to get your pins scheduling themselves for the next six months, all with free accounts. Seven steps, start to finish.</p>
+  <p class="lede">Here is how to get your pins scheduling themselves for the next six months, all with free accounts. Five steps, start to finish.</p>
 </div>
 
 <div class="wrap">
@@ -88,46 +89,31 @@
   <div class="step">
     <p class="steplabel">Step 1</p>
     <h2>Make a GitHub account</h2>
-    <p>This is where we will store your 70 pin images, instead of Google Drive, so each one has a real link that Pinterest can actually read.</p>
+    <p>This is where we will store your 70 pin images, instead of Google Drive, so each one has a real link that Pinterest can actually read. Already have a GitHub account? Skip the signup and just type your username below.</p>
     <div class="row"><a class="btn" href="https://github.com/signup" target="_blank" rel="noopener">Open GitHub Signup</a></div>
+    <div class="field" style="margin-top:18px">
+      <label for="user">Your GitHub username</label>
+      <input type="text" id="user" placeholder="type it here once you have it" autocomplete="off" spellcheck="false">
+    </div>
   </div>
 
   <div class="step">
     <p class="steplabel">Step 2</p>
     <h2>Make your image folder</h2>
-    <p>Name it pin-images, keep it set to Public, and click Create repository. Public is the setting that lets Pinterest see your images.</p>
+    <p>Name it pin-images and keep it set to Public, so Pinterest can see your images. Tick the box that says <strong>Add a README file</strong>, then click Create repository. That box gives your folder a starting point, which is what makes the upload step work.</p>
     <div class="row"><a class="btn" href="https://github.com/new?name=pin-images&amp;visibility=public&amp;description=My%20Back%20of%20House%20pin%20images" target="_blank" rel="noopener">Make the Folder</a></div>
   </div>
 
   <div class="step">
     <p class="steplabel">Step 3</p>
     <h2>Upload your 70 pins</h2>
-    <p>Enter your GitHub username, then open the upload screen. Drag all 70 images onto the big dotted box at once, wait for the list to finish loading, then click Commit changes at the bottom.</p>
-    <div class="field">
-      <label for="user">Your GitHub username</label>
-      <input type="text" id="user" placeholder="type it here" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="row"><a class="btn" id="upload" href="#" target="_blank" rel="noopener" aria-disabled="true">Open Upload Screen</a></div>
+    <p>Open the upload screen, drag all 70 images onto the big dotted box at once, wait for the list to finish loading, then click Commit changes at the bottom. Then open your folder and make sure all 70 are sitting there.</p>
+    <div class="row"><a class="btn" id="upload" href="#" target="_blank" rel="noopener" aria-disabled="true">Open Upload Screen</a><a class="btn quiet" id="openfolder" href="#" target="_blank" rel="noopener" aria-disabled="true">Open My Folder</a></div>
+    <p class="result show warn" id="needuser" style="margin-top:14px">Type your GitHub username in step one and these buttons light up.</p>
   </div>
 
   <div class="step">
     <p class="steplabel">Step 4</p>
-    <h2>Check your folder</h2>
-    <p>Make sure Pinterest can see all 70 images before you carry on. This checks your folder from the outside, the way Pinterest will.</p>
-    <div class="row"><button class="btn" id="check" type="button" aria-disabled="true">Check My Folder</button></div>
-    <div class="result" id="result" role="status" aria-live="polite"></div>
-  </div>
-
-  <div class="step">
-    <p class="steplabel">Step 5</p>
-    <h2>Copy your folder link</h2>
-    <p>Copy the link to the whole folder, not a single image, and paste it into your Pin Planner.</p>
-    <code class="link" id="repolink">Enter your GitHub username in step three</code>
-    <div class="row"><button class="btn solid" id="copy" type="button">Copy Folder Link</button></div>
-  </div>
-
-  <div class="step">
-    <p class="steplabel">Step 6</p>
     <h2>Make a Zernio account</h2>
     <p>This is what actually schedules and posts your pins for the next six months. Make the account, connect your Pinterest inside it, and copy your API key.</p>
     <div class="row">
@@ -137,9 +123,9 @@
   </div>
 
   <div class="step">
-    <p class="steplabel">Step 7</p>
+    <p class="steplabel">Step 5</p>
     <h2>Finish in your Pin Planner</h2>
-    <p>On the Pin Images tab, click Fetch My Pin Images and paste your folder link. Finish Batch Prep and Generate your pins. Then open The Pinterest Lounge, click Start My Rotation, paste your Zernio key, and Send. Your first week schedules while you watch, and the rest of the six months schedule on their own.</p>
+    <p>On the Pin Images tab, click Fetch My Pin Images and type your GitHub username. Finish Batch Prep and Generate your pins. Then open The Pinterest Lounge, click Start My Rotation, paste your Zernio key, and Send. Your first week schedules while you watch, and the rest of the six months schedule on their own.</p>
   </div>
 
   <footer>
@@ -153,56 +139,22 @@
 (function(){
   var userEl = document.getElementById('user');
   var uploadEl = document.getElementById('upload');
-  var checkEl = document.getElementById('check');
-  var repoEl = document.getElementById('repolink');
-  var copyEl = document.getElementById('copy');
-  var resultEl = document.getElementById('result');
+  var folderEl = document.getElementById('openfolder');
+  var needEl = document.getElementById('needuser');
   var REPO = 'pin-images';
   function clean(v){ return String(v || '').trim().replace(/^@/, '').replace(/\s+/g, ''); }
   function refresh(){
     var u = clean(userEl.value);
     var ready = u.length > 0;
     uploadEl.setAttribute('aria-disabled', ready ? 'false' : 'true');
-    checkEl.setAttribute('aria-disabled', ready ? 'false' : 'true');
+    folderEl.setAttribute('aria-disabled', ready ? 'false' : 'true');
     uploadEl.href = ready ? 'https://github.com/' + u + '/' + REPO + '/upload' : '#';
-    repoEl.textContent = ready ? 'https://github.com/' + u + '/' + REPO : 'Enter your GitHub username in step three';
+    folderEl.href = ready ? 'https://github.com/' + u + '/' + REPO : '#';
+    needEl.hidden = ready;
+    try { if (ready) localStorage.setItem('ghuser', u); } catch(e){}
   }
-  function say(kind, msg){ resultEl.className = 'result show ' + kind; resultEl.innerHTML = msg; }
+  try { var saved = localStorage.getItem('ghuser'); if (saved) userEl.value = saved; } catch(e){}
   userEl.addEventListener('input', refresh);
-  copyEl.addEventListener('click', function(){
-    var t = repoEl.textContent;
-    if (t.indexOf('http') !== 0) { return; }
-    navigator.clipboard.writeText(t).then(function(){
-      copyEl.textContent = 'Copied';
-      setTimeout(function(){ copyEl.textContent = 'Copy Folder Link'; }, 1600);
-    });
-  });
-  checkEl.addEventListener('click', function(){
-    var u = clean(userEl.value);
-    if (!u) { return; }
-    say('warn', 'Checking your folder...');
-    fetch('https://api.github.com/repos/' + u + '/' + REPO + '/contents/')
-      .then(function(r){
-        if (r.status === 404) {
-          return fetch('https://api.github.com/repos/' + u + '/' + REPO).then(function(rr){
-            if (rr.ok) { say('bad', "The folder is there but has no images in it yet. Go back to step three and upload your 70 pins."); }
-            else { say('bad', "No folder named <b>" + REPO + "</b> found on that username. Check the spelling, and make sure the folder is set to Public."); }
-            return null;
-          });
-        }
-        if (r.status === 403) { say('warn', "GitHub is asking us to wait. Give it a minute and check again."); return null; }
-        if (!r.ok) { say('bad', "GitHub didn't answer just then. Try again in a moment."); return null; }
-        return r.json();
-      })
-      .then(function(files){
-        if (!files) { return; }
-        var imgs = files.filter(function(f){ return f.type === 'file' && /\.(png|jpe?g|webp|gif)$/i.test(f.name); });
-        if (imgs.length === 0) { say('bad', "The folder is there but has no images in it yet. Go back to step three and upload your 70 pins."); }
-        else if (imgs.length < 70) { say('warn', "<b>" + imgs.length + "</b> of 70 images are in the folder so far. Go back to step three and add the rest."); }
-        else { say('good', "<b>All 70 images found, all public.</b> Copy your folder link in step five."); }
-      })
-      .catch(function(){ say('bad', "I couldn't reach GitHub just then. Check you're online and give it another go."); });
-  });
   refresh();
 })();
 </script>
