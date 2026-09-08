@@ -102,7 +102,7 @@
   <div class="step">
     <p class="steplabel">Step 3</p>
     <h2>Upload your 70 pins</h2>
-    <p>Enter your GitHub username, then drag all 70 images onto the upload screen at once and click Commit changes.</p>
+    <p>Enter your GitHub username, then open the upload screen. Drag all 70 images onto the big dotted box at once, wait for the list to finish loading, then click Commit changes at the bottom.</p>
     <div class="field">
       <label for="user">Your GitHub username</label>
       <input type="text" id="user" placeholder="type it here" autocomplete="off" spellcheck="false">
@@ -164,7 +164,7 @@
     var ready = u.length > 0;
     uploadEl.setAttribute('aria-disabled', ready ? 'false' : 'true');
     checkEl.setAttribute('aria-disabled', ready ? 'false' : 'true');
-    uploadEl.href = ready ? 'https://github.com/' + u + '/' + REPO + '/upload/main' : '#';
+    uploadEl.href = ready ? 'https://github.com/' + u + '/' + REPO + '/upload' : '#';
     repoEl.textContent = ready ? 'https://github.com/' + u + '/' + REPO : 'Enter your GitHub username in step three';
   }
   function say(kind, msg){ resultEl.className = 'result show ' + kind; resultEl.innerHTML = msg; }
@@ -183,7 +183,13 @@
     say('warn', 'Checking your folder...');
     fetch('https://api.github.com/repos/' + u + '/' + REPO + '/contents/')
       .then(function(r){
-        if (r.status === 404) { say('bad', "No folder named <b>" + REPO + "</b> found on that username. Check the spelling, and make sure the folder is set to Public."); return null; }
+        if (r.status === 404) {
+          return fetch('https://api.github.com/repos/' + u + '/' + REPO).then(function(rr){
+            if (rr.ok) { say('bad', "The folder is there but has no images in it yet. Go back to step three and upload your 70 pins."); }
+            else { say('bad', "No folder named <b>" + REPO + "</b> found on that username. Check the spelling, and make sure the folder is set to Public."); }
+            return null;
+          });
+        }
         if (r.status === 403) { say('warn', "GitHub is asking us to wait. Give it a minute and check again."); return null; }
         if (!r.ok) { say('bad', "GitHub didn't answer just then. Try again in a moment."); return null; }
         return r.json();
