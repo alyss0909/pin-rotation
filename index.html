@@ -88,7 +88,7 @@
 <div class="wrap">
 
   <div class="step">
-    <h2>STEP 1: MAKE A GITHUB ACCOUNT</h2>
+    <h2>Step 1: Make a GitHub Account</h2>
     <p>We’ll use GitHub to host your pin images so Pinterest can access them.</p>
     <div class="row"><a class="btn" href="https://github.com/signup" target="_blank" rel="noopener">Open GitHub Signup</a></div>
     <p style="margin-top:18px">Already have an account? Just enter your username below.</p>
@@ -99,22 +99,23 @@
   </div>
 
   <div class="step">
-    <h2>STEP 2: MAKE YOUR PIN IMAGE FOLDER</h2>
+    <h2>Step 2: Make Your Pin Image Folder</h2>
     <p>Click below to make your <code>pin-images</code> folder. Keep it <strong>Public</strong> and check <strong>Add a README file</strong> before you create it.</p>
     <div class="row"><a class="btn" href="https://github.com/new?name=pin-images&amp;visibility=public&amp;description=My%20Back%20of%20House%20pin%20images" target="_blank" rel="noopener">Make My Pin Images Folder</a></div>
   </div>
 
   <div class="step">
-    <h2>STEP 3: UPLOAD YOUR 70 PINS</h2>
+    <h2>Step 3: Upload Your 70 Pins</h2>
     <p>Open the upload screen, drag in all 70 pin images at once, then click <strong>Commit changes</strong> when they’re finished loading.</p>
     <div class="row"><a class="btn" id="upload" href="#" target="_blank" rel="noopener" aria-disabled="true">Open Upload Screen</a></div>
     <p style="margin-top:18px">Then check your folder and make sure all 70 images are there.</p>
-    <div class="row"><a class="btn" id="openfolder" href="#" target="_blank" rel="noopener" aria-disabled="true">Open My Folder</a></div>
+    <div class="row"><button class="btn" id="check" type="button" aria-disabled="true">Check My Folder</button><a class="btn quiet" id="openfolder" href="#" target="_blank" rel="noopener" aria-disabled="true">Open My Folder</a></div>
+    <div class="result" id="result" role="status" aria-live="polite"></div>
     <p class="result show warn" id="needuser" style="margin-top:14px">Enter your GitHub username in step one first.</p>
   </div>
 
   <div class="step">
-    <h2>STEP 4: SET UP ZERNIO</h2>
+    <h2>Step 4: Set Up Zernio</h2>
     <p>Zernio is what will schedule and post your pins. Make a free account, connect Pinterest, then copy your API key.</p>
     <div class="row">
       <a class="btn" href="https://zernio.com/" target="_blank" rel="noopener">Open Zernio</a>
@@ -123,7 +124,7 @@
   </div>
 
   <div class="step">
-    <h2>STEP 5: START YOUR ROTATION</h2>
+    <h2>Step 5: Start Your Rotation</h2>
     <p>In your Pin Planner, open the <strong>Pin Images</strong> tab and click <strong>Fetch My Pin Images</strong>. Enter your GitHub username. Then finish Batch Prep and generate your pins like normal.</p>
     <p>Open <strong>The Pinterest Lounge</strong> menu and click <strong>Start My Rotation</strong>. Paste your Zernio API key and click <strong>Schedule my pins</strong>. Your first week schedules while you watch. The rest finishes on its own after you close the sheet, in about 40 minutes.</p>
   </div>
@@ -135,21 +136,50 @@
   var userEl = document.getElementById('user');
   var uploadEl = document.getElementById('upload');
   var folderEl = document.getElementById('openfolder');
+  var checkEl = document.getElementById('check');
   var needEl = document.getElementById('needuser');
+  var resultEl = document.getElementById('result');
   var REPO = 'pin-images';
   function clean(v){ return String(v || '').trim().replace(/^@/, '').replace(/\s+/g, ''); }
+  function folderUrl(){ return 'https://github.com/' + clean(userEl.value) + '/' + REPO; }
   function refresh(){
     var u = clean(userEl.value);
     var ready = u.length > 0;
-    uploadEl.setAttribute('aria-disabled', ready ? 'false' : 'true');
-    folderEl.setAttribute('aria-disabled', ready ? 'false' : 'true');
-    uploadEl.href = ready ? 'https://github.com/' + u + '/' + REPO + '/upload' : '#';
-    folderEl.href = ready ? 'https://github.com/' + u + '/' + REPO : '#';
+    [uploadEl, folderEl, checkEl].forEach(function(el){ el.setAttribute('aria-disabled', ready ? 'false' : 'true'); });
+    uploadEl.href = ready ? folderUrl() + '/upload' : '#';
+    folderEl.href = ready ? folderUrl() : '#';
     needEl.hidden = ready;
     try { if (ready) localStorage.setItem('ghuser', u); } catch(e){}
   }
+  function say(kind, msg){ resultEl.className = 'result show ' + kind; resultEl.innerHTML = msg; }
+  function look(){ say('warn', "Couldn't count them from here. Open your folder and check the 70 are there."); }
   try { var saved = localStorage.getItem('ghuser'); if (saved) userEl.value = saved; } catch(e){}
   userEl.addEventListener('input', refresh);
+  checkEl.addEventListener('click', function(){
+    var u = clean(userEl.value);
+    if (!u) { return; }
+    say('warn', 'Checking...');
+    var base = 'https://api.github.com/repos/' + u + '/' + REPO;
+    fetch(base + '/contents/')
+      .then(function(r){
+        if (r.ok) {
+          return r.json().then(function(files){
+            var imgs = files.filter(function(f){ return f.type === 'file' && /\.(png|jpe?g|webp|gif)$/i.test(f.name); });
+            if (imgs.length === 0) { say('warn', "Your folder is there, but no images are in it yet. Go back to the upload screen."); }
+            else if (imgs.length < 70) { say('warn', imgs.length + " of 70 images are in. Add the rest."); }
+            else { say('good', "All 70 images are in. Carry on to step four."); }
+          });
+        }
+        if (r.status === 404) {
+          return fetch(base).then(function(rr){
+            if (rr.ok) { say('warn', "Your folder is there, but no images are in it yet. Go back to the upload screen."); }
+            else { say('bad', "No pin-images folder on that username yet. Check the spelling in step one."); }
+          });
+        }
+        look();
+      })
+      .catch(look);
+  });
   refresh();
 })();
 </script>
