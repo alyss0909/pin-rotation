@@ -14,6 +14,10 @@
     --display:"AT KING","Playfair Display",Georgia,serif;
     --body:Karla,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     --mono:"Roboto Mono",ui-monospace,monospace;
+    /* One measure for every text line in a step. In rem, not ch, so the smaller
+       aside type resolves to the SAME pixel width as the body copy above it. */
+    --measure:46.5rem;
+    --gutter:24px;
   }
   *{ box-sizing:border-box; }
   [hidden]{ display:none !important; }
@@ -40,24 +44,32 @@
   h1 .l{ display:block; }
   .lede{ font-size:1.12rem; line-height:1.62; color:var(--brown); max-width:700px; margin:22px auto 0; }
 
-  .wrap{ max-width:960px; margin:0 auto; padding:0 24px 56px; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 var(--gutter) 56px; }
 
-  .step{ padding:34px 0; border-top:1px solid var(--rule); }
+  /* The rule is a section rule, so it runs the full width of the outer container.
+     Negative margin + matching padding pushes the border out past the text column
+     while leaving every line of text exactly where it was. */
+  .step{
+    padding:34px var(--gutter); margin:0 calc(var(--gutter) * -1);
+    border-top:1px solid var(--rule);
+  }
   .step:first-child{ border-top:0; padding-top:52px; }
   .step h2{
     font-family:var(--display); font-weight:500;
     font-size:clamp(1.42rem,2.1vw,1.6rem); line-height:1.25; letter-spacing:0;
     color:var(--burgundy); margin:0 0 14px;
   }
-  .step p{ font-size:1.06rem; color:var(--brown); margin:0 0 18px; max-width:74ch; }
+  .step p{ font-size:1.06rem; color:var(--brown); margin:0 0 18px; max-width:var(--measure); }
   .step > *:last-child{ margin-bottom:0; }
 
   /* Quiet footnote, tied to the element directly above it. No rule, no decoration:
-     it stays attached by a tight gap and by sharing the left edge of the text above.
+     it stays attached by sharing both edges of the text column and by one gap that
+     reads as deliberate rather than cramped.
      Needs .step p.aside to out-specify .step p, which was silently eating it. */
+  .step > *:has(+ p.aside){ margin-bottom:0; }
   .step p.aside{
     font-size:.93rem; font-style:italic; line-height:1.5; color:#6E5A4C;
-    margin:6px 0 0; max-width:60ch;
+    margin:16px 0 0; max-width:var(--measure);
     padding-left:0; border-left:0;
   }
 
@@ -91,7 +103,7 @@
         line-height:1; white-space:nowrap; background:none; border:0; border-radius:0; padding:0; }
   .link{ display:block; font-family:var(--mono); font-size:.88rem; color:var(--brown); background:#fff; border:1px solid var(--greige); border-radius:8px; padding:13px 15px; word-break:break-all; margin:0 0 14px; }
   .result{ display:none; }
-  .result.show{ display:block; margin:18px 0 0; padding:14px 16px; border-radius:8px; font-size:.95rem; line-height:1.5; max-width:74ch; }
+  .result.show{ display:block; margin:18px 0 0; padding:14px 16px; border-radius:8px; font-size:.95rem; line-height:1.5; max-width:var(--measure); }
   .result.good{ background:rgba(147,185,211,.24); color:var(--burgundy); }
   .result.bad{ background:rgba(155,27,12,.10); color:var(--brick); }
   .result.warn{ background:var(--butter); color:var(--brown); }
@@ -99,8 +111,11 @@
   @media (min-width:720px){ .hero{ padding-top:88px; } }
   @media (max-width:560px){
     h1{ letter-spacing:-0.012em; }
-    .step{ padding:28px 0; }
+    /* 8px of outdent instead of 24: the rule still reads wider than the text
+       column but keeps a 16px margin from the screen edge. */
+    .step{ padding:28px 8px; margin:0 -8px; }
     .step:first-child{ padding-top:40px; }
+    .step p{ max-width:none; }
     .step p.aside{ max-width:none; }
   }
 </style>
