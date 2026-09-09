@@ -25,25 +25,40 @@
   }
   strong{ color:var(--burgundy); font-weight:700; }
 
-  .hero{ text-align:center; padding:64px 24px 8px; }
-  .logo{ display:block; height:64px; width:auto; margin:0 auto 44px; }
-  .eyebrow{ font-family:var(--mono); font-size:.74rem; letter-spacing:.2em; color:var(--brick); margin:0 0 22px; }
+  .hero{ text-align:center; padding:64px 24px 0; }
+  .logo{ display:block; height:64px; width:auto; margin:0 auto 34px; }
+  .eyebrow{
+    display:inline-block; font-family:var(--mono); font-size:.7rem; line-height:1;
+    letter-spacing:.22em; color:var(--brick);
+    border:1px solid var(--greige); border-radius:999px;
+    padding:8px 15px 8px 17px; margin:0 0 30px;
+  }
   h1{
     font-family:var(--display); font-weight:500;
-    font-size:clamp(2.3rem,7.5vw,3.5rem); line-height:1.05; letter-spacing:-0.015em;
+    font-size:clamp(2.3rem,7.5vw,3.5rem); line-height:1.05; letter-spacing:-0.02em;
     color:var(--burgundy); margin:0 auto; max-width:16ch;
   }
-  .lede{ font-size:1.12rem; color:var(--brown); max-width:721px; margin:22px auto 0; }
+  .lede{ font-size:1.1rem; line-height:1.62; color:var(--brown); max-width:640px; margin:20px auto 0; }
 
-  .wrap{ max-width:880px; margin:0 auto; padding:0 24px 60px; }
+  .wrap{ max-width:880px; margin:0 auto; padding:0 24px 64px; }
 
-  .step{ padding:32px 0; border-top:1px solid var(--rule); }
-  .step:first-child{ border-top:0; padding-top:40px; }
-  .steplabel{ font-family:var(--mono); font-size:.74rem; letter-spacing:.16em; color:var(--brick); margin:0 0 8px; }
-  .step h2{ font-family:var(--display); font-weight:500; font-size:1.7rem; color:var(--burgundy); margin:0 0 12px; letter-spacing:-0.01em; }
-  .step p{ font-size:1.06rem; color:var(--brown); margin:0 0 18px; max-width:75ch; }
+  .step{ padding:40px 0; border-top:1px solid var(--rule); }
+  .step:first-child{ border-top:0; padding-top:64px; }
+  .step h2{
+    font-family:var(--display); font-weight:500;
+    font-size:clamp(1.42rem,2.1vw,1.6rem); line-height:1.25; letter-spacing:0;
+    color:var(--burgundy); margin:0 0 14px;
+  }
+  .step p{ font-size:1.06rem; color:var(--brown); margin:0 0 20px; max-width:68ch; }
   .step > *:last-child{ margin-bottom:0; }
-  .aside{ font-size:.95rem; font-style:italic; color:#5B4A3E; margin:18px 0 0; max-width:75ch; line-height:1.55; }
+
+  /* Quiet footnote, tied to the element directly above it.
+     Needs .step p.aside to out-specify .step p, which was silently eating it. */
+  .step p.aside{
+    font-size:.93rem; font-style:italic; line-height:1.5; color:#6E5A4C;
+    margin:12px 0 0; max-width:56ch;
+    padding-left:15px; border-left:2px solid var(--greige);
+  }
 
   .field{ margin:0; flex:0 1 340px; min-width:240px; }
   .field label{ display:block; font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; color:var(--brown); margin-bottom:8px; }
@@ -51,8 +66,8 @@
   #user:focus{ outline:none; border-color:var(--burgundy); }
   #user::placeholder{ color:var(--brown); opacity:.45; }
 
-  .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-  .row.pair{ gap:16px 20px; align-items:flex-end; }
+  .row{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+  .row.pair{ gap:18px 22px; align-items:flex-end; }
   .row.pair .btn{ flex:0 0 auto; }
   @media (max-width:560px){ .row.pair{ align-items:stretch; } .row.pair .field{ flex:1 1 100%; } }
   .btn{
@@ -69,25 +84,27 @@
   .btn.solid{ background:var(--burgundy); color:var(--cream); border-color:var(--burgundy); }
   .btn.solid:hover{ background:#4d1417; color:var(--cream); }
 
-  code{ font-family:var(--mono); font-size:.88em; line-height:1; background:#fff; border:1px solid var(--greige); border-radius:4px; padding:1px 6px; }
+  code{ font-family:var(--mono); font-size:.88em; line-height:1; white-space:nowrap; background:#fff; border:1px solid var(--greige); border-radius:4px; padding:1px 6px; }
   .link{ display:block; font-family:var(--mono); font-size:.88rem; color:var(--brown); background:#fff; border:1px solid var(--greige); border-radius:8px; padding:13px 15px; word-break:break-all; margin:0 0 14px; }
   .result{ display:none; }
-  .result.show{ display:block; margin:16px 0 0; padding:14px 16px; border-radius:8px; font-size:.95rem; line-height:1.5; }
+  .result.show{ display:block; margin:18px 0 0; padding:14px 16px; border-radius:8px; font-size:.95rem; line-height:1.5; max-width:68ch; }
   .result.good{ background:rgba(147,185,211,.24); color:var(--burgundy); }
   .result.bad{ background:rgba(155,27,12,.10); color:var(--brick); }
   .result.warn{ background:var(--butter); color:var(--brown); }
 
-  footer{ border-top:1px solid var(--rule); margin-top:8px; padding-top:28px; }
-  footer p{ font-size:.95rem; color:var(--brown); margin:0 0 14px; }
-
-  @media (min-width:720px){ .hero{ padding-top:100px; } }
+  @media (min-width:720px){ .hero{ padding-top:104px; } }
+  @media (max-width:560px){
+    .step{ padding:32px 0; }
+    .step:first-child{ padding-top:44px; }
+    .step p.aside{ padding-left:13px; max-width:none; }
+  }
 </style>
 </head>
 <body>
 
 <div class="hero">
   <img class="logo" src="assets/boh-logo.png" alt="Back of House">
-  <p class="eyebrow">Back of House &middot; 3.3 The Batch</p>
+  <p class="eyebrow">3.3 The Batch</p>
   <h1>Set Up Your Pin Planner</h1>
   <p class="lede">To get your In House Pin Concierge assembled, you’ll need 2 free accounts; one to host your images and one to schedule your pin rotation. Don’t get spooked by the tech-bro names, I’ll walk you through each step of the way!</p>
 </div>
@@ -118,7 +135,7 @@
     <h2>Step 3: Upload Your 70 Pins</h2>
     <p>Open the upload screen, drag in all 70 pin images at once, then click <strong>Commit changes</strong> when they’re finished loading.</p>
     <div class="row"><a class="btn" id="upload" href="#" target="_blank" rel="noopener" aria-disabled="true">Open Upload Screen</a></div>
-    <p style="margin:18px 0">Then, check your folder and make sure all 70 images are there</p>
+    <p style="margin:26px 0 20px">Then, check your folder and make sure all 70 images are there</p>
     <div class="row"><button class="btn" id="check" type="button" aria-disabled="true">Check My Folder</button><a class="btn quiet" id="openfolder" href="#" target="_blank" rel="noopener" aria-disabled="true">Open My Folder</a></div>
     <div class="result" id="result" role="status" aria-live="polite"></div>
     <p class="result show warn" id="needuser" style="margin:14px 0 0">Enter your GitHub username in step one first.</p>
