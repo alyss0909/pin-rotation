@@ -18,6 +18,8 @@
        aside type resolves to the SAME pixel width as the body copy above it. */
     --measure:46.5rem;
     --gutter:24px;
+    /* How far each section rule stops short of the screen edge. */
+    --edge:16px;
   }
   *{ box-sizing:border-box; }
   [hidden]{ display:none !important; }
@@ -44,13 +46,24 @@
   h1 .l{ display:block; }
   .lede{ font-size:1.12rem; line-height:1.62; color:var(--brown); max-width:700px; margin:22px auto 0; }
 
-  .wrap{ max-width:960px; margin:0 auto; padding:0 var(--gutter) 56px; }
+  /* Full-bleed grid: the middle column holds the text at its old width and
+     position, the outer columns are the breathing room the rules stop in.
+     No 100vw anywhere, so a classic scrollbar can never push the page wide. */
+  .wrap{
+    margin:0; padding:0 0 56px;
+    display:grid;
+    grid-template-columns:
+      var(--edge) [full-start] minmax(0,1fr)
+      [content-start] minmax(0,912px) [content-end]
+      minmax(0,1fr) [full-end] var(--edge);
+  }
 
-  /* The rule is a section rule, so it runs the full width of the outer container.
-     Negative margin + matching padding pushes the border out past the text column
-     while leaving every line of text exactly where it was. */
+  /* The rule is a section rule, so it runs the full width of the page, stopping
+     --edge from each screen edge. The inline padding puts every line of text back
+     in the same place it sat before, at every screen width. */
   .step{
-    padding:34px var(--gutter); margin:0 calc(var(--gutter) * -1);
+    grid-column:full-start / full-end; margin:0;
+    padding:34px max(calc(24px - var(--edge)), calc((100% - 912px) / 2));
     border-top:1px solid var(--rule);
   }
   .step:first-child{ border-top:0; padding-top:52px; }
@@ -109,11 +122,12 @@
   .result.warn{ background:var(--butter); color:var(--brown); }
 
   @media (min-width:720px){ .hero{ padding-top:88px; } }
+  @media (min-width:1120px){ :root{ --edge:40px; } }
   @media (max-width:560px){
     h1{ letter-spacing:-0.012em; }
-    /* 8px of outdent instead of 24: the rule still reads wider than the text
-       column but keeps a 16px margin from the screen edge. */
-    .step{ padding:28px 8px; margin:0 -8px; }
+    /* The rule keeps its 16px margin from the screen edge here; only the
+       vertical rhythm tightens. */
+    .step{ padding-block:28px; }
     .step:first-child{ padding-top:40px; }
     .step p{ max-width:none; }
     .step p.aside{ max-width:none; }
