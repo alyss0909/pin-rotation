@@ -80,53 +80,55 @@
 <body>
 
 <div class="hero">
-  <p class="eyebrow">Back of House &middot; 3.3 The Rotation</p>
+  <p class="eyebrow">Back of House &middot; 3.3 The Batch</p>
   <h1>Set Up Your Pin Planner</h1>
-  <p class="lede">To get your pin concierge assembled, you’ll need 2 free accounts; one to host your images and one to schedule your pin rotation. Don’t get spooked by the tech-bro names, I’ll walk you through each step of the way!</p>
+  <p class="lede">To get your In House Pin Concierge assembled, you’ll need 2 free accounts; one to host your images and one to schedule your pin rotation. Don’t get spooked by the tech-bro names, I’ll walk you through each step of the way!</p>
 </div>
 
 <div class="wrap">
 
   <div class="step">
     <h2>Step 1: Make a GitHub Account</h2>
-    <p>We’ll use GitHub to host your pin images so Pinterest can access them.</p>
+    <p>We’ll use GitHub to host your pin images so Pinterest can access them publicly.</p>
     <div class="row"><a class="btn" href="https://github.com/signup" target="_blank" rel="noopener">Open GitHub Signup</a></div>
     <p style="margin-top:18px">Already have an account? Just enter your username below.</p>
     <div class="field">
       <label for="user">Your GitHub username</label>
       <input type="text" id="user" autocomplete="off" spellcheck="false">
     </div>
+    <p style="margin-top:18px;font-size:.95rem">(PS: You’ll also need to add this username in the sheet under your batch prep checklist)</p>
   </div>
 
   <div class="step">
     <h2>Step 2: Make Your Pin Image Folder</h2>
     <p>Click below to make a folder called <code>pin-images</code>, then click <strong>Create repository</strong>.</p>
     <div class="row"><a class="btn" href="https://github.com/new?template_owner=productiveentrepreneurteam&amp;template_name=pin-images-template&amp;name=pin-images&amp;visibility=public" target="_blank" rel="noopener">Make My Pin Images Folder</a></div>
-    <p style="margin-top:18px;font-size:.95rem">PS: make sure to keep the visibility public so Pinterest can post your images.</p>
+    <p style="margin-top:18px;font-size:.95rem">(PS: make sure to keep the visibility public so Pinterest can post your images)</p>
   </div>
 
   <div class="step">
     <h2>Step 3: Upload Your 70 Pins</h2>
     <p>Open the upload screen, drag in all 70 pin images at once, then click <strong>Commit changes</strong> when they’re finished loading.</p>
     <div class="row"><a class="btn" id="upload" href="#" target="_blank" rel="noopener" aria-disabled="true">Open Upload Screen</a></div>
-    <p style="margin-top:18px">Then check your folder and make sure all 70 images are there.</p>
+    <p style="margin-top:18px">Then, check your folder and make sure all 70 images are there</p>
     <div class="row"><button class="btn" id="check" type="button" aria-disabled="true">Check My Folder</button><a class="btn quiet" id="openfolder" href="#" target="_blank" rel="noopener" aria-disabled="true">Open My Folder</a></div>
     <div class="result" id="result" role="status" aria-live="polite"></div>
     <p class="result show warn" id="needuser" style="margin-top:14px">Enter your GitHub username in step one first.</p>
   </div>
 
   <div class="step">
-    <h2>Step 4: Set Up Zernio</h2>
-    <p>Zernio is what will schedule and post your pins. Make a free account, connect Pinterest, then copy your API key.</p>
+    <h2>Step 4: Make a Zernio Account</h2>
+    <p>The In House Scheduler uses Zernio to schedule and post your pins. Make a free account, connect Pinterest, then copy your API key and keep it handy, after you’ve shuffled your pins, when you’re ready to schedule it will ask for this API key</p>
     <div class="row">
       <a class="btn" href="https://zernio.com/" target="_blank" rel="noopener">Open Zernio</a>
       <a class="btn quiet" href="https://zernio.com/dashboard/api-keys" target="_blank" rel="noopener">Open My API Keys</a>
     </div>
+    <p style="margin-top:18px;font-size:.95rem">(note: this is a secret key, since you’ve made a copy - the sheet and the key stay private inside your own google drive - we never see it)</p>
   </div>
 
   <div class="step">
     <h2>Step 5: Back to Batch Prep</h2>
-    <p>That’s the one-time setup done. Go back to the <strong>Batch Prep</strong> tab in your Pin Planner and work the checklist top to bottom. It takes it from here.</p>
+    <p>That’s the one-time setup done! Go back to the <strong>Batch Prep</strong> tab in your Pin Planner, and continue with the rest of the checklist!</p>
   </div>
 
 </div>
